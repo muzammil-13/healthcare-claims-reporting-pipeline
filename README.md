@@ -1,229 +1,112 @@
-# Healthcare Auto Adjudication Report Automation Toolkit
-
-A lightweight automation toolkit for processing healthcare auto-adjudication reports generated from legacy systems and delivering clean, validated reports directly to SharePoint.
-
-This project focuses on removing repetitive manual work from reporting workflows such as downloading reports from Outlook, cleaning them in Excel, validating fields, and uploading them to SharePoint.
-
-The toolkit converts that process into a reliable Python pipeline.
+# **Healthcare Claims Auto-Adjudication Reporting Pipeline**
 
 ---
 
-## Problem
+## 🚀 Overview
 
-Many healthcare operations still depend on legacy systems such as mainframe batch jobs. These jobs typically generate TXT or CSV reports that are sent through email.
+Built an automated reporting pipeline to process healthcare claims data and generate daily/month-to-date (MTD) performance reports across multiple business segments including WGS, Medicaid, GBD, Commercial, and New States.
 
-A common manual workflow looks like this:
-
-Mainframe JCL job → report sent via Outlook → analyst downloads file → data cleaned in Excel → report uploaded to SharePoint → summary emailed.
-
-This process is repetitive, error-prone, and time consuming.
+The system ingests raw operational data, computes key metrics (Auto Adjudication Rate, total claims, manual processing, etc.), updates reporting workbooks, and delivers formatted HTML reports via email.
 
 ---
 
-## Solution
+## ⚙️ Key Features
 
-This toolkit automates the entire pipeline.
+* Automated ETL pipeline (Text, CSV, Excel data sources)
+* Multi-segment reporting (WGS, Medicaid, GBD, Commercial)
+* Metric computation:
 
-Reports are automatically processed using Python, cleaned and validated, then uploaded to SharePoint. A daily summary email and a simple dashboard provide visibility into report status.
-
-The goal is simple:
-turn a manual reporting workflow into a reliable automated system.
-
----
-
-## Workflow Overview
-
-Input
-TXT or CSV reports generated from legacy systems (typically mainframe JCL batch jobs and delivered through Outlook).
-
-Processing
-Python data pipeline cleans and validates the data.
-
-Output
-Cleaned reports automatically uploaded to SharePoint.
-
-Extras
-Daily email summary and a lightweight dashboard to monitor report status.
+  * Total Claims
+  * Auto Adjudication (AA)
+  * Manual Claims
+  * First Pass / Second Pass
+  * AA Rate (%)
+* Excel report generation (West Market summary)
+* HTML email report generation
+* Outlook-based automated email delivery
+* Config-driven file paths and environment setup
+* Logging and error handling for production stability
 
 ---
 
-## Architecture
+## 🧠 System Architecture
 
 ```
-Legacy System (Mainframe JCL)
-        │
-        ▼
-Report Delivered via Outlook
-        │
-        ▼
-Python Processing Pipeline
-   - Data Cleaning
-   - Field Validation
-   - Transformation
-        │
-        ▼
-SharePoint Upload
-        │
-        ├── Daily Summary Email
-        └── Dashboard Monitoring
+Raw MBU Files + CSV + Excel
+            ↓
+     Data Parsing Layer
+            ↓
+     Data Merge Layer
+            ↓
+   Metrics Computation Engine
+            ↓
+   ┌───────────────┬───────────────┐
+   ↓                               ↓
+Excel Report Update        HTML Email Generator
+   ↓                               ↓
+        Outlook Email Sender
 ```
 
 ---
 
-## Tech Stack
-```
-Python
-Pandas – data cleaning and transformation
-FastAPI – lightweight API layer for triggers and dashboard
-Docker – containerized deployment
-GitHub Actions – automated CI/CD pipeline
+## 🔄 Workflow
 
-Optional integrations may include:
+1. Load configuration and determine execution mode (MTD)
+2. Parse MBU text report files
+3. Merge with reference CSV data
+4. Append data to Year-To-Date dataset
+5. Compute metrics for:
 
-Microsoft Graph API for email and SharePoint automation.
-```
----
-
-## Project Structure
-
-```
-healthcare-report-automation/
-│
-├── app/
-│   ├── ingestion/
-│   │   ├── email_fetcher.py
-│   │   └── file_parser.py
-│   │
-│   ├── processing/
-│   │   ├── cleaner.py
-│   │   ├── validator.py
-│   │   └── transformer.py
-│   │
-│   ├── output/
-│   │   ├── sharepoint_uploader.py
-│   │   └── email_summary.py
-│   │
-│   ├── api/
-│   │   └── main.py
-│   │
-│   └── dashboard/
-│       └── metrics.py
-│
-├── tests/
-├── docker/
-│   └── Dockerfile
-│
-├── .github/workflows/
-│   └── ci.yml
-│
-└── README.md
-```
+   * WGS
+   * Medicaid
+   * GBD
+   * Commercial
+   * New States
+6. Update Excel reporting workbook
+7. Generate HTML email with formatted tables
+8. Send report via Outlook with attachments
 
 ---
 
-## Features
+## 🛠 Tech Stack
 
-Automated ingestion of TXT or CSV reports
-Data cleaning and normalization using Pandas
-Validation checks for missing or inconsistent fields
-Automated upload to SharePoint
-Daily summary email with report status
-Lightweight dashboard for monitoring processing results
-Containerized deployment using Docker
-CI/CD automation with GitHub Actions
+* Python
+* Pandas
+* OpenPyXL
+* ConfigParser
+* Win32com (Outlook Automation)
+* Excel-based reporting
 
 ---
 
-## Example Data Processing Flow
+## ⚠️ Challenges & Improvements
 
-1. Report file arrives via Outlook.
-2. Pipeline fetches the file automatically.
-3. Pandas cleans the dataset.
-4. Validation rules check for missing values or incorrect formats.
-5. Processed file is saved as a standardized CSV.
-6. File is uploaded to SharePoint.
-7. Daily summary email is generated.
+### Challenges
 
----
+* Monolithic script (>1500 lines)
+* Hardcoded paths and email lists
+* Lack of logging and error handling
+* Repeated logic across segments
 
-## Local Development
+### Improvements Implemented
 
-Clone the repository
-
-```
-git clone https://github.com/yourusername/healthcare-report-automation.git
-cd healthcare-report-automation
-```
-
-Create a virtual environment
-
-```
-python -m venv venv
-source venv/bin/activate
-```
-
-Install dependencies
-
-```
-pip install -r requirements.txt
-```
-
-Run the API
-
-```
-uvicorn app.api.main:app --reload
-```
+* Added structured logging
+* Introduced error handling for file operations and email sending
+* Externalized configuration using `.ini` files
+* Refactored repeated logic into reusable functions
+* Improved code readability and modularity
 
 ---
 
-## Running with Docker
+## 📈 Impact
 
-Build the container
-
-```
-docker build -t healthcare-automation .
-```
-
-Run the container
-
-```
-docker run -p 8000:8000 healthcare-automation
-```
+* Reduced manual reporting effort
+* Improved reporting accuracy and consistency
+* Enabled reliable daily operational insights
+* Increased maintainability of legacy reporting system
 
 ---
 
-## CI/CD
+## 🔐 Note
 
-GitHub Actions handles:
-
-Linting
-Testing
-Docker build
-Deployment pipeline
-
----
-
-## Future Improvements
-
-Automated Outlook integration via Microsoft Graph API
-Advanced anomaly detection in reports
-Historical reporting analytics dashboard
-Scheduled orchestration using Airflow or Prefect
-Alerting system for failed jobs
-
----
-
-## Use Case
-
-Designed for healthcare reporting workflows involving:
-
-Auto adjudication reports
-Claims processing reports
-Operational daily batch reports
-Legacy system reporting pipelines
-
----
-
-## License
-
-MIT License
+All data used in this repository is anonymized or sample data. No real client or sensitive data is included.
