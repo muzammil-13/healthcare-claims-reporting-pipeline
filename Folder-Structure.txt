@@ -1,0 +1,29 @@
+healthcare-claims-reporting-pipeline/
+│
+├── README.md
+├── requirements.txt
+├── .gitignore
+│
+├── config/
+│   └── config.sample.ini
+│
+├── data/
+│   └── sample/              # dummy data (NO real client data)
+│
+├── src/
+│   ├── main.py              # entry point
+│   ├── data_loader.py
+│   ├── data_processor.py
+│   ├── metrics.py
+│   ├── excel_writer.py
+│   ├── email_sender.py
+│
+├── templates/
+│   └── email_template.html
+│
+├── docs/
+│   ├── architecture.md
+│   └── sop.md               # your cleaned SOP
+│
+└── logs/
+    └── report.log
