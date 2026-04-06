@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+*venv/
+.env
+
+# Data files (Ensure raw MBU files, CSV, and Excel reports are not committed)
+*.csv
+*.xlsx
+*.xls
+*.txt
+
+# Logs
+logs/
+*.log
