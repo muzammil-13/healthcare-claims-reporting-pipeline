@@ -1,0 +1,18 @@
+(.venv) C:\Users\muzam\Documents\Contribute\healthcare-claims-reporting-pipeline>python main.py > main-py.log     
+Traceback (most recent call last):
+  File "C:\Users\muzam\Documents\Contribute\healthcare-claims-reporting-pipeline\main.py", line 61, in <module>
+    main()
+  File "C:\Users\muzam\Documents\Contribute\healthcare-claims-reporting-pipeline\main.py", line 48, in main
+    setup_logging(config['Logging'].get('log_file', 'pipeline.log'))
+  File "C:\Users\muzam\Documents\Contribute\healthcare-claims-reporting-pipeline\main.py", line 8, in setup_logging        
+    logging.basicConfig(
+  File "C:\Users\muzam\AppData\Local\Programs\Python\Python311\Lib\logging\__init__.py", line 2050, in basicConfig
+    h = FileHandler(filename, mode,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\muzam\AppData\Local\Programs\Python\Python311\Lib\logging\__init__.py", line 1181, in __init__
+    StreamHandler.__init__(self, self._open())
+                                 ^^^^^^^^^^^^
+  File "C:\Users\muzam\AppData\Local\Programs\Python\Python311\Lib\logging\__init__.py", line 1213, in _open
+    return open_func(self.baseFilename, self.mode,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\muzam\\Documents\\Contribute\\healthcare-claims-reporting-pipeline\\logs\\pipeline.log'

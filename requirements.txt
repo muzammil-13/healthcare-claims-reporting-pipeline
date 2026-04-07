@@ -1,0 +1,5 @@
+# Core dependencies based on README.md tech stack
+pandas==2.2.1
+openpyxl==3.1.2
+pywin32==306
+# Note: configparser is part of the Python Standard Library
