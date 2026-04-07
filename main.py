@@ -40,8 +40,15 @@ def compute_metrics():
 def update_excel_report(config):
     """Updates the Excel reporting workbook."""
     logging.info("Updating Excel report...")
-    # Add logic here
-    pass
+    try:
+        report_path = config['Paths']['excel_report']
+        # Placeholder for actual openpyxl/pandas logic
+    except PermissionError:
+        logging.error(f"Permission denied: Please close the Excel file at {report_path} before running the pipeline.")
+        raise
+    except Exception as e:
+        logging.error(f"Failed to update Excel report: {e}")
+        raise
 
 def generate_and_send_email(config):
     """Generates formatted HTML report and sends via Outlook."""
@@ -56,13 +63,17 @@ def main():
     
     logging.info("--- Starting Healthcare Claims Auto-Adjudication Pipeline ---")
     
-    # Following the workflow outlined in the README
-    parse_and_merge_data(config)
-    compute_metrics()
-    update_excel_report(config)
-    generate_and_send_email(config)
-    
-    logging.info("--- Pipeline Execution Complete ---")
+    try:
+        # Following the workflow outlined in the README
+        parse_and_merge_data(config)
+        compute_metrics()
+        update_excel_report(config)
+        generate_and_send_email(config)
+    except Exception as e:
+        logging.critical(f"Pipeline aborted due to critical error: {e}", exc_info=True)
+    finally:
+        # This ensures the completion message is logged whether it succeeds or fails
+        logging.info("--- Pipeline Execution Complete ---")
 
 if __name__ == "__main__":
     main()
