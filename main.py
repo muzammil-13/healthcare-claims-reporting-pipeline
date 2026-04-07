@@ -21,8 +21,15 @@ def load_config(config_path='config.ini'):
 def parse_and_merge_data(config):
     """Parses MBU files, merges with reference CSV, and appends to YTD."""
     logging.info("Starting data parsing and merging...")
-    # Add logic here
-    pass
+    try:
+        # Example of logging a specific variable/path
+        mbu_path = config['Paths']['raw_mbu_data']
+        logging.info(f"Looking for raw MBU data at: {mbu_path}")
+        
+        # Placeholder for actual pandas logic
+    except Exception as e:
+        logging.error(f"Critical error during data parsing: {e}")
+        raise  # Re-raise the exception to stop the pipeline if data parsing fails
 
 def compute_metrics():
     """Computes AA rates, manual claims, etc., for multiple segments."""
