@@ -28,3 +28,98 @@
 2026-04-07 11:13:48,394 - INFO - Updating Excel report...
 2026-04-07 11:13:48,394 - INFO - Generating HTML email and sending via Outlook...
 2026-04-07 11:13:48,394 - INFO - --- Pipeline Execution Complete ---
+2026-04-08 20:20:10,532 - INFO - Logging initialized.
+2026-04-08 20:20:10,532 - INFO - --- Starting Healthcare Claims Auto-Adjudication Pipeline ---
+2026-04-08 20:20:10,532 - INFO - Starting data parsing and merging...
+2026-04-08 20:20:10,532 - INFO - Looking for raw MBU data at: data/input/mbu_report.txt
+2026-04-08 20:20:10,532 - INFO - Computing segment metrics...
+2026-04-08 20:20:10,532 - INFO - Updating Excel report...
+2026-04-08 20:20:10,532 - INFO - Generating HTML email and sending via Outlook...
+2026-04-08 20:20:10,532 - INFO - --- Pipeline Execution Complete ---
+2026-04-09 17:47:31,657 - INFO - Logging initialized.
+2026-04-09 17:47:31,658 - INFO - --- Starting Healthcare Claims Auto-Adjudication Pipeline ---
+2026-04-09 17:47:31,658 - INFO - Starting data parsing and merging...
+2026-04-09 17:47:31,658 - INFO - Reading MBU data from: data/input/mbu_report.txt
+2026-04-09 17:47:31,660 - INFO - Loaded 5 records from MBU report
+2026-04-09 17:47:31,660 - INFO - Reading reference data from: data/input/reference_data.csv
+2026-04-09 17:47:31,661 - INFO - Loaded 5 reference records
+2026-04-09 17:47:31,664 - INFO - Merged data: 5 records
+2026-04-09 17:47:31,664 - INFO - Appending to existing YTD dataset at: data/processed/ytd_data.csv
+2026-04-09 17:47:31,700 - INFO - YTD dataset updated: 6 total records
+2026-04-09 17:47:31,700 - INFO - Computing segment metrics...
+2026-04-09 17:47:31,702 - INFO - WGS: Total=1, Auto=1, Manual=0, AA Rate=100.00%
+2026-04-09 17:47:31,703 - INFO - MED: Total=1, Auto=0, Manual=1, AA Rate=0.00%
+2026-04-09 17:47:31,704 - INFO - GBD: Total=1, Auto=1, Manual=0, AA Rate=100.00%
+2026-04-09 17:47:31,706 - INFO - COM: Total=1, Auto=0, Manual=1, AA Rate=0.00%
+2026-04-09 17:47:31,707 - INFO - NEW: Total=1, Auto=1, Manual=0, AA Rate=100.00%
+2026-04-09 17:47:31,707 - INFO - Updating Excel report...
+2026-04-09 17:47:31,707 - INFO - Creating Excel report at: data/output/West_Market_Summary.xlsx
+2026-04-09 17:47:34,995 - INFO - Excel report created successfully with 5 segments
+2026-04-09 17:47:34,995 - INFO - Generating HTML email and sending via Outlook...
+2026-04-09 17:47:34,995 - INFO - Pipeline completed successfully!
+2026-04-09 17:47:34,995 - INFO - --- Pipeline Execution Complete ---
+2026-04-09 18:35:47 - pipeline - INFO - ======================================================================
+2026-04-09 18:35:47 - pipeline - INFO - Healthcare Claims Auto-Adjudication Pipeline - STARTED
+2026-04-09 18:35:47 - pipeline - INFO - ======================================================================
+2026-04-09 18:35:47 - pipeline - INFO - ============================================================
+2026-04-09 18:35:47 - pipeline - INFO - START: Data Parsing and Merging
+2026-04-09 18:35:47 - pipeline - INFO - ============================================================
+2026-04-09 18:35:47 - pipeline - INFO - Reading MBU data from: data/input/mbu_report.txt
+2026-04-09 18:35:47 - pipeline - INFO - Loaded 5 records from MBU report
+2026-04-09 18:35:47 - pipeline - INFO - MBU Data - Shape: (5, 5), Columns: ['ClaimID', 'ProcessDate', 'SegmentCode', 'Status', 'ProcessingType']
+2026-04-09 18:35:47 - pipeline - INFO - MBU Data - Memory usage: 1.47 KB
+2026-04-09 18:35:47 - pipeline - INFO - Reading reference data from: data/input/reference_data.csv
+2026-04-09 18:35:47 - pipeline - INFO - Loaded 5 reference records
+2026-04-09 18:35:47 - pipeline - INFO - Reference Data - Shape: (5, 3), Columns: ['SegmentCode', 'SegmentName', 'Region']
+2026-04-09 18:35:47 - pipeline - INFO - Reference Data - Memory usage: 0.95 KB
+2026-04-09 18:35:47 - pipeline - INFO - Merged data: 5 records
+2026-04-09 18:35:47 - pipeline - INFO - Appending to existing YTD dataset at: data/processed/ytd_data.csv
+2026-04-09 18:35:47 - pipeline - INFO - YTD dataset updated: 11 total records
+2026-04-09 18:35:47 - pipeline - INFO - END: Data Parsing and Merging - SUCCESS
+2026-04-09 18:35:47 - pipeline - INFO - ============================================================
+2026-04-09 18:35:47 - pipeline - INFO - ============================================================
+2026-04-09 18:35:47 - pipeline - INFO - START: Metrics Computation
+2026-04-09 18:35:47 - pipeline - INFO - ============================================================
+2026-04-09 18:35:47 - pipeline - INFO - Metrics - WGS:
+2026-04-09 18:35:47 - pipeline - INFO -   Total Claims: 1
+2026-04-09 18:35:47 - pipeline - INFO -   Auto Claims: 1
+2026-04-09 18:35:47 - pipeline - INFO -   Manual Claims: 0
+2026-04-09 18:35:47 - pipeline - INFO -   AA Rate (%): 100.00
+2026-04-09 18:35:47 - pipeline - INFO - Metrics - MED:
+2026-04-09 18:35:47 - pipeline - INFO -   Total Claims: 1
+2026-04-09 18:35:47 - pipeline - INFO -   Auto Claims: 0
+2026-04-09 18:35:47 - pipeline - INFO -   Manual Claims: 1
+2026-04-09 18:35:47 - pipeline - INFO -   AA Rate (%): 0.00
+2026-04-09 18:35:47 - pipeline - INFO - Metrics - GBD:
+2026-04-09 18:35:47 - pipeline - INFO -   Total Claims: 1
+2026-04-09 18:35:47 - pipeline - INFO -   Auto Claims: 1
+2026-04-09 18:35:47 - pipeline - INFO -   Manual Claims: 0
+2026-04-09 18:35:47 - pipeline - INFO -   AA Rate (%): 100.00
+2026-04-09 18:35:47 - pipeline - INFO - Metrics - COM:
+2026-04-09 18:35:47 - pipeline - INFO -   Total Claims: 1
+2026-04-09 18:35:47 - pipeline - INFO -   Auto Claims: 0
+2026-04-09 18:35:47 - pipeline - INFO -   Manual Claims: 1
+2026-04-09 18:35:47 - pipeline - INFO -   AA Rate (%): 0.00
+2026-04-09 18:35:47 - pipeline - INFO - Metrics - NEW:
+2026-04-09 18:35:47 - pipeline - INFO -   Total Claims: 1
+2026-04-09 18:35:47 - pipeline - INFO -   Auto Claims: 1
+2026-04-09 18:35:47 - pipeline - INFO -   Manual Claims: 0
+2026-04-09 18:35:47 - pipeline - INFO -   AA Rate (%): 100.00
+2026-04-09 18:35:47 - pipeline - INFO - END: Metrics Computation - SUCCESS
+2026-04-09 18:35:47 - pipeline - INFO - ============================================================
+2026-04-09 18:35:47 - pipeline - INFO - ============================================================
+2026-04-09 18:35:47 - pipeline - INFO - START: Excel Report Generation
+2026-04-09 18:35:47 - pipeline - INFO - ============================================================
+2026-04-09 18:35:47 - pipeline - INFO - Creating Excel report at: data/output/West_Market_Summary.xlsx
+2026-04-09 18:35:47 - pipeline - INFO - Excel Report Data - Shape: (5, 6), Columns: ['Segment Code', 'Segment Name', 'Total Claims', 'Auto Claims', 'Manual Claims', 'AA Rate (%)']
+2026-04-09 18:35:47 - pipeline - INFO - Excel Report Data - Memory usage: 0.81 KB
+2026-04-09 18:35:48 - pipeline - INFO - Excel report created successfully with 5 segments
+2026-04-09 18:35:48 - pipeline - INFO - END: Excel Report Generation - SUCCESS
+2026-04-09 18:35:48 - pipeline - INFO - ============================================================
+2026-04-09 18:35:48 - pipeline - INFO - Generating HTML email and sending via Outlook...
+2026-04-09 18:35:48 - pipeline - INFO - Email functionality - placeholder for Phase 2
+2026-04-09 18:35:48 - pipeline - INFO - ======================================================================
+2026-04-09 18:35:48 - pipeline - INFO - Pipeline completed successfully!
+2026-04-09 18:35:48 - pipeline - INFO - ======================================================================
+2026-04-09 18:35:48 - pipeline - INFO - Healthcare Claims Auto-Adjudication Pipeline - FINISHED
+2026-04-09 18:35:48 - pipeline - INFO - ======================================================================
