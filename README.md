@@ -1,4 +1,3 @@
-
 # 🏥 Healthcare Claims Reporting Pipeline
 
 **Automating Auto-Adjudication (AA) Reporting from Raw Claims Data to Shareable Insights**
@@ -13,7 +12,7 @@ It simulates an enterprise environment where claims data originates from mainfra
 
 > Designed and built during an IBM CIC internship to mirror real production workflows in claims processing systems.
 
----
+### Screenshots:
 
 ## 🎯 Problem Statement
 
