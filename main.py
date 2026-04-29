@@ -1,9 +1,10 @@
 import sys
-from config import PATHS, ensure_dirs
+from config import PATHS, EMAIL, ensure_dirs
 from src.ingestion import load_text_delimited, load_csv
 from src.validation import validate
 from src.processing import merge_data, append_to_ytd, save_csv
 from src.metrics import calculate_metrics, print_metrics, save_excel_report
+from src.email_report import generate_and_send_email
 
 def main():
     try:
@@ -38,9 +39,13 @@ def main():
         print_metrics(metrics)
         
         # Step 5: Save report
-        print("[5] Saving Excel report...")
+        print("\n[5] Saving Excel report...")
         save_excel_report(metrics, PATHS["excel_report"])
         
+        # Step 6: Send email report
+        print("\n[6] Sending email notification...")
+        generate_and_send_email(metrics, EMAIL, PATHS["excel_report"])
+
         print("=" * 70)
         print("Pipeline completed successfully!")
         print("=" * 70)

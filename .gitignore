@@ -15,3 +15,5 @@ src/__pycache__
 # logs/
 # *.log
 .vscode
+
+config.ini

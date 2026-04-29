@@ -22,8 +22,8 @@ SEGMENT_CODES = ["WGS", "MED", "GBD", "COM", "NEW"]
 REQUIRED_COLUMNS = ["SegmentCode", "ProcessingType"]
 
 EMAIL = {
-    "sender": "mxml@telegmail.com",
-    "recipients": ["mxml@telegmail.com", "manager@domain.com"],
+    "sender": "thecto2025@gmail.com",
+    "recipients": ["muzammilibrahim13@gmail.com", "muzammil.ibrahim.pm@ibm.com"],
     "subject": "Daily Healthcare Claims Auto-Adjudication Report",
 }
 
