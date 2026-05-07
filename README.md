@@ -12,7 +12,7 @@ It simulates an enterprise environment where claims data originates from mainfra
 
 > Designed and built during an IBM CIC internship to mirror real production workflows in claims processing systems.
 
-### Screenshots:
+<!-- ### Screenshots: -->
 
 ## 🎯 Problem Statement
 
@@ -94,24 +94,19 @@ Email Automation (Link-Based)
 
 ```bash
 healthcare-claims-reporting-pipeline/
-
 ├── data/
-│   ├── input/              # Simulated mainframe input
-│   ├── output/             # Generated reports
-│
-├── pipeline/
-│   ├── ingest.py           # Data loading
-│   ├── validate.py         # Data checks
-│   ├── transform.py        # AA logic
-│   ├── aggregate.py        # Metrics computation
-│   ├── export.py           # Report generation
-│
-├── automation/
-│   ├── email.py            # Email generation (link-based)
-│
-├── run_pipeline.py         # Entry point
-├── config.yaml             # Configurations
-├── progress_log.md         # Development tracking
+│   ├── sample/
+│   │   ├── mbu_report.txt
+│   │   └── reference_data.csv
+├── src/
+│   ├── ingestion.py
+│   ├── validation.py
+│   ├── processing.py
+│   ├── metrics.py
+│   └── report.py
+├── main.py
+├── config.py
+├── requirements.txt
 └── README.md
 ```
 

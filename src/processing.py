@@ -14,6 +14,7 @@ def append_to_ytd(merged_df, ytd_path=None):
     if os.path.exists(ytd_path):
         ytd_df = pd.read_csv(ytd_path)
         ytd_df = pd.concat([ytd_df, merged_df], ignore_index=True)
+        ytd_df = ytd_df.drop_duplicates()
     else:
         ytd_df = merged_df
     

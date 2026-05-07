@@ -1,19 +1,13 @@
-# Python
 __pycache__/
 *.py[cod]
-*venv/
+.venv/
+venv/
 .env
-src/__pycache__
-
-# # Data files (Ensure raw MBU files, CSV, and Excel reports are not committed)
-# *.csv
-# *.xlsx
-# *.xls
-# *.txt
-
-# # Logs
-# logs/
-# *.log
-.vscode
-
 config.ini
+
+data/output/*
+data/processed/*
+logs/
+*.log
+*.xlsx
+*.xls

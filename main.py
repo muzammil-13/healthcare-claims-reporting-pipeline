@@ -1,10 +1,9 @@
-import sys
-from config import PATHS, EMAIL, ensure_dirs
+from config import PATHS, ensure_dirs
 from src.ingestion import load_text_delimited, load_csv
 from src.validation import validate
 from src.processing import merge_data, append_to_ytd, save_csv
 from src.metrics import calculate_metrics, print_metrics, save_excel_report
-from src.email_report import generate_and_send_email
+from src.report import generate_html_report
 
 def main():
     try:

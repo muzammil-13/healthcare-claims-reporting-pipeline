@@ -3,7 +3,8 @@ import pandas as pd
 def validate_columns(df, required_cols=None):
     """Check if DataFrame has required columns."""
     if required_cols is None:
-        required_cols = ["SegmentCode"]
+        required_cols = ["SegmentCode","ProcessingType"]
+    
     
     missing = set(required_cols) - set(df.columns)
     if missing:
