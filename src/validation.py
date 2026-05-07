@@ -38,9 +38,9 @@ def check_duplicates(df, subset=None):
     
     return df
 
-def validate(df):
+def validate(df, required_cols=None):
     """Run all validation checks."""
-    validate_columns(df)
+    validate_columns(df, required_cols)
     check_nulls(df)
     df = check_duplicates(df)
     return df

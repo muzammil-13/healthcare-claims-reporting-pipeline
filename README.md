@@ -1,218 +1,195 @@
-# 🏥 Healthcare Claims Reporting Pipeline
+# Healthcare Claims Reporting Pipeline
 
-**Automating Auto-Adjudication (AA) Reporting from Raw Claims Data to Shareable Insights**
+Python ETL pipeline for transforming simulated healthcare claims extracts into
+auto-adjudication reporting metrics and Excel-ready stakeholder outputs.
 
----
+## Overview
 
-## 🚀 Overview
+This project models a manual enterprise reporting workflow used in healthcare
+claims operations. Raw claims data is ingested from structured files, validated,
+merged with reference data, transformed into year-to-date reporting data, and
+summarized into auto-adjudication metrics.
 
-This project transforms a **manual, error-prone healthcare claims reporting workflow** into a  **modular, reproducible data pipeline** .
+The project was inspired by claims reporting workflows observed during an IBM
+Consulting Client Innovation Center internship, where operational reports often
+depend on mainframe extracts, spreadsheet handling, and recurring stakeholder
+updates.
 
-It simulates an enterprise environment where claims data originates from mainframe systems and is processed into  **Auto-Adjudication (AA) metrics** , enabling faster and more reliable reporting.
+## Problem
 
-> Designed and built during an IBM CIC internship to mirror real production workflows in claims processing systems.
+Manual claims reporting workflows are often built around repeated file handling,
+spreadsheet updates, and ad hoc scripts. That creates several risks:
 
-<!-- ### Screenshots: -->
+- Repetitive manual effort
+- Inconsistent report generation
+- Higher chance of human error
+- Limited reproducibility
+- Hard-to-maintain reporting logic
 
-## 🎯 Problem Statement
+## Solution
 
-In traditional enterprise workflows:
-
-* Claims data is generated via **mainframe batch jobs**
-* Data is extracted manually via **TSO commands + Outlook attachments**
-* Reports are created using **ad-hoc scripts and Excel workflows**
-* Email reporting is **manual and inconsistent**
-
-This leads to:
-
-* ❌ Repetitive manual effort
-* ❌ High risk of human error
-* ❌ Lack of reproducibility
-* ❌ No clear pipeline structure
-
----
-
-## 💡 Solution
-
-This project rebuilds the workflow as a  **structured data pipeline** :
+This repository rebuilds that workflow as a small, modular Python pipeline:
 
 ```text
-Mainframe Job (Simulated)
-        ↓
-Data Ingestion
-        ↓
-Validation Layer
-        ↓
-Transformation (AA Logic)
-        ↓
-Aggregation (MTD / LOB / State)
-        ↓
-Report Generation
-        ↓
-Email Automation (Link-Based)
+Claims Extract
+    -> Data Ingestion
+    -> Validation
+    -> Reference Data Merge
+    -> YTD Dataset Update
+    -> KPI Calculation
+    -> Excel Report Generation
+    -> Email-ready HTML Summary
 ```
 
----
+## Features
 
-## ⚙️ Key Features
+- Loads pipe-delimited claims extracts and CSV reference data
+- Validates required columns and checks critical fields
+- Removes duplicate records during validation and YTD processing
+- Merges claims data with segment reference data
+- Calculates segment-level auto-adjudication metrics
+- Exports report data to an Excel workbook
+- Generates HTML summary content for email reporting
+- Uses a simple configuration layer for paths, segments, and email metadata
 
-### 📥 Data Ingestion
+## Metrics Generated
 
-* Simulates mainframe dataset extraction using structured input files
-* Supports CSV/TXT formats
+For each configured business segment, the pipeline calculates:
 
-### ✅ Data Validation
+- Total claims
+- Auto-processed claims
+- Manually processed claims
+- Auto-adjudication rate
 
-* Ensures latest data (date checks)
-* Schema validation for consistency
+Configured segments:
 
-### 🔄 Transformation Engine
+- WGS
+- Medicaid
+- GBD
+- Commercial
+- New States
 
-* Processes claims data using **pandas**
-* Implements Auto-Adjudication (AA) logic
+## Project Structure
 
-### 📊 Aggregation Layer
-
-* Generates:
-  * MTD (Month-to-Date) metrics
-  * LOB-wise summaries
-  * State-wise comparisons
-
-### 📤 Report Generation
-
-* Outputs clean Excel reports
-* Dashboard-ready tabular formats
-
-### 📬 Email Automation (Simulated)
-
-* Generates email-ready content
-* Uses **link-based reporting** (aligned with SharePoint workflows)
-
----
-
-## 🧱 Project Structure
-
-```bash
+```text
 healthcare-claims-reporting-pipeline/
 ├── data/
-│   ├── sample/
-│   │   ├── mbu_report.txt
-│   │   └── reference_data.csv
+│   └── input/
+│       ├── mbu_report.txt
+│       └── reference_data.csv
 ├── src/
 │   ├── ingestion.py
 │   ├── validation.py
 │   ├── processing.py
 │   ├── metrics.py
 │   └── report.py
-├── main.py
 ├── config.py
+├── main.py
 ├── requirements.txt
 └── README.md
 ```
 
----
+Generated files are written under:
 
-## ▶️ Getting Started
+```text
+data/processed/
+data/output/
+logs/
+```
 
-### 1. Clone the Repository
+These generated outputs are intentionally ignored by Git.
+
+## Tech Stack
+
+- Python
+- pandas
+- openpyxl
+- SMTP/email utilities from the Python standard library
+
+## Getting Started
+
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/muzammil-13/healthcare-claims-reporting-pipeline.git
 cd healthcare-claims-reporting-pipeline
 ```
 
-### 2. Install Dependencies
+### 2. Create and activate a virtual environment
+
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+```
+
+### 3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Add Input Data
+### 4. Add input files
 
-Place your sample dataset inside:
+Place the input files in `data/input/`:
 
-```bash
-data/input/
+- `mbu_report.txt`
+- `reference_data.csv`
+
+The sample claims extract uses a pipe-delimited format:
+
+```text
+ClaimID|ProcessDate|SegmentCode|Status|ProcessingType
+CLM10001|2023-10-01|WGS|PAID|AUTO
 ```
 
----
-
-### 4. Run the Pipeline
+### 5. Run the pipeline
 
 ```bash
-python run_pipeline.py
+python main.py
 ```
 
----
+## Sample Output
 
-## 📊 Sample Output
+After a successful run, the pipeline creates:
 
-The pipeline generates:
+- `data/processed/ytd_data.csv`
+- `data/output/West_Market_Summary.xlsx`
+- Console summary of auto-adjudication metrics
+- HTML email body content generated from calculated metrics
 
-* 📄 `mtd_report.xlsx`
-* 📊 Aggregated AA metrics (LOB / State)
-* 📬 Email-ready summary content
+## Configuration
 
----
+Core settings live in `config.py`, including:
 
-## 🧠 Design Decisions
+- Input and output paths
+- Segment code mappings
+- Required column definitions
+- Email subject and recipients
 
-### Why Modular Pipeline?
+SMTP credentials should not be committed to Git. Use a local ignored
+configuration file or environment variables for real credentials.
 
-* Improves readability and maintainability
-* Aligns with real-world data engineering systems
+## Current Limitations
 
-### Why Simulate Mainframe?
+- Mainframe extraction is simulated with local input files
+- Scheduling is not implemented
+- Dashboard visualization is not included yet
+- Email sending depends on local SMTP configuration
+- Metrics are currently segment-level only
 
-* Direct access is restricted
-* Simulation enables reproducibility
+## Future Enhancements
 
-### Why Link-Based Email?
+- Add unit tests for each pipeline stage
+- Add richer validation for dates, status values, and processing types
+- Add state-level and month-to-date reporting views
+- Add Streamlit or Power BI-ready dashboard output
+- Add scheduling through cron, Windows Task Scheduler, or Airflow
+- Move secrets fully to environment-based configuration
+- Add Docker support for reproducible execution
 
-* Enterprise systems use **SharePoint instead of attachments**
-* Avoids versioning conflicts
+## Resume Summary
 
----
-
-## 🚧 Limitations
-
-* Mainframe job triggering is simulated
-* No real-time backend integration
-* Email sending is mocked (no SMTP integration)
-
----
-
-## 🔮 Future Enhancements
-
-* 🔗 SharePoint API integration
-* 📈 Streamlit dashboard for visualization
-* ⏱️ Scheduling (cron / Airflow)
-* 🧪 Unit testing for pipeline stages
-* 📦 Containerization (Docker)
-
----
-
-## 📈 Impact
-
-This project demonstrates:
-
-* Transition from **manual operations → automated pipelines**
-* Application of **data engineering principles in enterprise workflows**
-* Ability to **reverse-engineer and systemize production processes**
-
----
-
-## 🙌 Acknowledgements
-
-* Built during internship at **IBM Consulting Client Innovation Center**
-* Inspired by real-world claims processing workflows in healthcare systems
-
----
-
-## 📬 Contact
-
-If you’re working on similar automation or data pipeline problems, feel free to connect or discuss ideas.
-
----
-
-⭐ If you found this useful, consider giving it a star!
+Built a modular Python ETL pipeline that transforms simulated healthcare claims
+extracts into auto-adjudication KPI reports. Implemented file ingestion,
+validation, reference-data merging, YTD dataset generation, segment-level metric
+calculation, Excel report export, and email-ready HTML reporting.

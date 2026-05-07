@@ -1,9 +1,10 @@
-from config import PATHS, ensure_dirs
+import sys
+from config import PATHS, ensure_dirs, EMAIL
 from src.ingestion import load_text_delimited, load_csv
 from src.validation import validate
 from src.processing import merge_data, append_to_ytd, save_csv
 from src.metrics import calculate_metrics, print_metrics, save_excel_report
-from src.report import generate_html_report
+from src.report import generate_html_report, generate_and_send_email
 
 def main():
     try:
@@ -22,7 +23,7 @@ def main():
         # Step 2: Validate
         print("\n[2] Validating data...")
         mbu_df = validate(mbu_df)
-        reference_df = validate(reference_df)
+        reference_df = validate(reference_df, required_cols=["SegmentCode"])
         print(f"  Validation passed")
         
         # Step 3: Process
