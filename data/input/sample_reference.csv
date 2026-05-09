@@ -1,6 +1,6 @@
-SegmentCode,SegmentName,Region,BusinessOwner,ReportingGroup
-WGS,Whole Group Solutions,West,Claims Ops,WGS
-MED,Medicaid,National,Claims Ops,GBD
-GBD,Government Business Division,National,Claims Ops,GBD
-COM,Commercial,West,Claims Ops,Commercial
-NEW,New States,Multi-State,Claims Ops,New States
+SegmentCode,SegmentName,Region
+COM,Commercial,West
+MCR,Medicare,West
+MCD,Medicaid,South
+WGS,WGS Market,East
+GBD,GBD Market,North
