@@ -11,6 +11,9 @@ config.read(ini_path)
 # Extract configurations into structures expected by main.py
 PATHS = dict(config["Paths"])
 
+# Extract logging configuration
+LOG_FILE = config.get("Logging", "log_file", fallback="logs/pipeline.log")
+
 # Format EMAIL config to match what src/report.py expects
 EMAIL = dict(config["SMTP"])
 if "recipients" in EMAIL:
