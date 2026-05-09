@@ -1,12 +1,13 @@
 import smtplib
 import logging
+import base64
 from email.message import EmailMessage
 from pathlib import Path
 from src.charts import generate_aa_rate_chart_base64
 
 logger = logging.getLogger(__name__)
 
-def generate_html_report(metrics: dict, report_date: str, sharepoint_links: dict = None, chart_b64: str = "") -> str:
+def generate_html_report(metrics: dict, report_date: str, sharepoint_links: dict = None, chart_b64: str = "", chart_cid: str = "") -> str:
     """Generate the full HTML email body."""
     # Build metrics table rows
     table_rows = ""
@@ -34,10 +35,17 @@ def generate_html_report(metrics: dict, report_date: str, sharepoint_links: dict
 
     # Inline chart section
     chart_section = ""
-    if chart_b64:
+    if chart_cid:
+        img_src = f"cid:{chart_cid}"
+    elif chart_b64:
+        img_src = f"data:image/png;base64,{chart_b64}"
+    else:
+        img_src = ""
+        
+    if img_src:
         chart_section = f"""
         <h3>📊 AA Rate by Segment</h3>
-        <img src="data:image/png;base64,{chart_b64}"
+        <img src="{img_src}"
              alt="AA Rate Chart"
              style="max-width:700px; width:100%; border:1px solid #e0e0e0; border-radius:6px; padding:8px;" />
         """
@@ -97,7 +105,8 @@ def generate_and_send_email(
     # Generate inline chart
     chart_b64 = generate_aa_rate_chart_base64(metrics, report_date)
     
-    html_content = generate_html_report(metrics, report_date, sharepoint_links, chart_b64)
+    # Use CID format for email delivery to bypass Outlook/Gmail security blocks
+    email_html_content = generate_html_report(metrics, report_date, sharepoint_links, chart_cid="aa_rate_chart" if chart_b64 else "")
     
     smtp_server = email_config.get('server', 'smtp.gmail.com')
     smtp_port = int(email_config.get('port', 465))
@@ -111,8 +120,13 @@ def generate_and_send_email(
     msg['To'] = ", ".join(email_config.get('recipients', []))
     
     msg.set_content("Please enable HTML to view this report.")
-    msg.add_alternative(html_content, subtype='html')
+    msg.add_alternative(email_html_content, subtype='html')
     
+    # Embed the actual image bytes safely as a related CID attachment
+    if chart_b64:
+        image_bytes = base64.b64decode(chart_b64)
+        msg.get_payload()[1].add_related(image_bytes, maintype='image', subtype='png', cid='<aa_rate_chart>')
+
     # No attachments — files are on SharePoint
     try:
         with smtplib.SMTP_SSL(smtp_server, smtp_port) as server:
@@ -128,7 +142,9 @@ def generate_and_send_email(
     report_filename = f"logs/report_{datetime.today().strftime('%Y%m%d')}.html"
     Path("logs").mkdir(exist_ok=True)
     with open(report_filename, "w", encoding="utf-8") as f:
-        f.write(html_content)
+        # Save standard Base64 locally so it still renders in the browser when testing
+        local_html_content = generate_html_report(metrics, report_date, sharepoint_links, chart_b64=chart_b64)
+        f.write(local_html_content)
     logger.info(f"  HTML report saved locally: {report_filename}")
 
     # ==============================================================================
