@@ -1,13 +1,28 @@
+# Python
 __pycache__/
 *.py[cod]
+
+# Virtual Environments
 .venv/
 venv/
+
+# Configuration & Secrets
 .env
 config.ini
 
+# Data & Artifacts (Protecting PHI/PII)
+data/input/*
 data/output/*
 data/processed/*
+*.csv
+
+# Logs & Reports
 logs/
 *.log
 *.xlsx
 *.xls
+
+# OS & IDEs
+.DS_Store
+.vscode/
+.idea/
