@@ -132,14 +132,14 @@ pip install -r requirements.txt
 
 Place the input files in `data/input/`:
 
-- `mbu_report.txt`
-- `reference_data.csv`
+- `sample_mbu.csv`
+- `sample_reference.csv`
 
 The sample claims extract uses a pipe-delimited format:
 
 ```text
-ClaimID|ProcessDate|SegmentCode|Status|ProcessingType
-CLM10001|2023-10-01|WGS|PAID|AUTO
+SegmentCode|ClaimDate|TOT_CLMS|TOT_AA|Status
+COM|2026-05-08|1250|980|PAID
 ```
 
 ### 5. Run the pipeline

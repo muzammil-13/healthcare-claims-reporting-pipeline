@@ -10,9 +10,9 @@ def calculate_metrics(df):
         if len(segment_data) == 0:
             continue
         
-        total = len(segment_data)
-        auto = len(segment_data[segment_data["ProcessingType"] == "AUTO"])
-        manual = len(segment_data[segment_data["ProcessingType"] == "MANUAL"])
+        total = int(segment_data["TOT_CLMS"].sum())
+        auto = int(segment_data["TOT_AA"].sum())
+        manual = total - auto
         aa_rate = round(auto / total * 100, 2) if total > 0 else 0
         
         metrics[segment_code] = {

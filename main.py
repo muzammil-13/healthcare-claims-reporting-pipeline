@@ -1,3 +1,4 @@
+import os
 import sys
 import logging
 from config import PATHS, ensure_dirs, EMAIL, LOG_FILE
@@ -52,6 +53,7 @@ def main():
         ytd_df = append_to_ytd(merged_df)
         # After ytd_df.to_csv(ytd_path...) line, add:
         processed_filename = f"mbu_{report_date_str}.csv"
+        os.makedirs("data/processed", exist_ok=True)
         shutil.copy(PATHS["raw_mbu_data"], f"data/processed/{processed_filename}")
         logger.info(f"  MBU file archived to: data/processed/{processed_filename}")
         save_csv(ytd_df, PATHS["ytd_dataset"])

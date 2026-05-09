@@ -1,5 +1,4 @@
 import smtplib
-import configparser
 from email.message import EmailMessage
 from pathlib import Path
 
@@ -51,15 +50,10 @@ def generate_and_send_email(metrics, email_config, attachment_paths=None, report
     """Sends an email with the HTML report and optional attachments using SMTP_SSL."""
     html_content = generate_html_report(metrics, report_date)
     
-    # Load credentials from config.ini
-    config = configparser.ConfigParser()
-    config_path = Path(__file__).parent.parent / 'config.ini'
-    config.read(config_path)
-    
-    smtp_server = config.get('SMTP', 'server', fallback='smtp.gmail.com')
-    smtp_port = config.getint('SMTP', 'port', fallback=465)
-    smtp_user = config.get('SMTP', 'username', fallback=email_config.get('sender'))
-    smtp_password = config.get('SMTP', 'password', fallback='')
+    smtp_server = email_config.get('server', 'smtp.gmail.com')
+    smtp_port = int(email_config.get('port', 465))
+    smtp_user = email_config.get('username', email_config.get('sender'))
+    smtp_password = email_config.get('password', '')
     
     msg = EmailMessage()
     base_subject = email_config.get('subject', 'Daily Healthcare Claims Report')

@@ -27,7 +27,9 @@ else:
 SEGMENT_CODES = {
     "MCR": "Medicare",
     "MCD": "Medicaid",
-    "COM": "Commercial"
+    "COM": "Commercial",
+    "WGS": "WGS Market",
+    "GBD": "GBD Market"
 }
 
 def ensure_dirs():

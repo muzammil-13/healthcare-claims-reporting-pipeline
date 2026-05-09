@@ -16,6 +16,10 @@ data/output/*
 data/processed/*
 *.csv
 
+# Allow sample data files to be tracked
+!data/input/sample_mbu.csv
+!data/input/sample_reference.csv
+
 # Logs & Reports
 logs/
 *.log
