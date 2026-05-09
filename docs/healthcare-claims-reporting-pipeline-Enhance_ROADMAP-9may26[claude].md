@@ -16,10 +16,9 @@
 | Sample data (runnable) | ✅ Done |
 | Email output | ✅ Done (HTML & SMTP) |
 | End-to-end test | ✅ Verified |
-| Measurable impact stat | 🔄 In Progress (Phase 2) |
+| Measurable impact stat | ✅ Done |
 
-**Current read:** Built and runs! Email and Excel outputs are fully operational.  
-**Target read:** Solves a real ops problem. Numbers to prove it. (Credibility focus)
+**Current read:** Completely portfolio-ready. Solves a real ops problem, has numbers to prove it, architecture documented, and features a live Streamlit dashboard!
 
 ---
 
@@ -54,11 +53,11 @@ MED|AUTO|2026-04-01|900.00
 
 ---
 
-## Phase 2 — Make It Credible (Week 3–4, by ~06 Jun) 🚀 CURRENT FOCUS
+## ~~Phase 2 — Make It Credible (Week 3–4, by ~06 Jun)~~ ✅ COMPLETED
 
 **Goal:** The README tells a real story with real numbers.
 
-### Task 2.1 — Add the impact stat
+### ✅ Task 2.1 — Add the impact stat
 Replace this in README:
 > "Reduced manual reporting effort"
 
@@ -67,7 +66,7 @@ With this:
 
 Use your actual estimate. Even 30 mins → 3 mins is a strong number.
 
-### Task 2.2 — Add a `run_demo.sh` or `quickstart` section
+### ✅ Task 2.2 — Add a `run_demo.sh` or `quickstart` section
 ```bash
 # Install dependencies
 pip install -r requirements.txt

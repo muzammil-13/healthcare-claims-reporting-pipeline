@@ -27,7 +27,7 @@ st.set_page_config(
 
 def load_latest_excel(output_dir="data/output") -> pd.DataFrame:
     """Find the most recently written Excel report and load it."""
-    pattern = os.path.join(output_dir, "West_Market_Summary*.xlsx")
+    pattern = os.path.join(output_dir, "west_market_summary*.xlsx")
     files = sorted(glob.glob(pattern), reverse=True)
     if not files:
         return None, None
