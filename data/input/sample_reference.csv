@@ -1,6 +1,6 @@
 SegmentCode,SegmentName,Region
 COM,Commercial,West
-MCR,Medicare,West
-MCD,Medicaid,South
+MED,Medicaid,South
+NEW,New States,East
 WGS,WGS Market,East
 GBD,GBD Market,North

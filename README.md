@@ -198,8 +198,10 @@ configuration file or environment variables for real credentials.
 - Move secrets fully to environment-based configuration
 - Add Docker support for reproducible execution
 
-## Resume Summary
+## Author
 
-**Built by:** Muzammil Ibrahim, IBM CIC Bangalore Intern (2025–26).
+**Muzammil Ibrahim**  
+*IBM CIC Bangalore Intern (2025–26)*
 
-Built a Python ETL pipeline automating healthcare claims auto-adjudication reporting across 5 business segments. Reduced daily reporting time from ~45 minutes to under 2 minutes. Designed system architecture based on real claims operations workflows, handled robust data validation edge cases, and implemented end-to-end automated email delivery. Stack: Python, Pandas, OpenPyXL, ConfigParser.
+I built this Python ETL pipeline to automate healthcare claims auto-adjudication reporting across 5 business segments. This project reduces daily reporting time from ~45 minutes to under 2 minutes. I designed the system architecture based on real claims operations workflows, handled robust data validation edge cases, and implemented end-to-end automated email delivery.  
+**Stack:** Python, Pandas, OpenPyXL, ConfigParser.

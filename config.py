@@ -25,11 +25,11 @@ else:
 
 # Define business segment mapping codes expected by src/metrics.py
 SEGMENT_CODES = {
-    "MCR": "Medicare",
-    "MCD": "Medicaid",
-    "COM": "Commercial",
     "WGS": "WGS Market",
-    "GBD": "GBD Market"
+    "MED": "Medicaid",
+    "GBD": "GBD Market",
+    "COM": "Commercial",
+    "NEW": "New States"
 }
 
 def ensure_dirs():
