@@ -132,14 +132,14 @@ pip install -r requirements.txt
 
 Place the input files in `data/input/`:
 
-- `mbu_report.txt`
-- `reference_data.csv`
+- `sample_mbu.csv`
+- `sample_reference.csv`
 
 The sample claims extract uses a pipe-delimited format:
 
 ```text
-ClaimID|ProcessDate|SegmentCode|Status|ProcessingType
-CLM10001|2023-10-01|WGS|PAID|AUTO
+SegmentCode|ClaimDate|TOT_CLMS|TOT_AA|Status
+COM|2026-05-08|1250|980|PAID
 ```
 
 ### 5. Run the pipeline
@@ -198,8 +198,10 @@ configuration file or environment variables for real credentials.
 - Move secrets fully to environment-based configuration
 - Add Docker support for reproducible execution
 
-## Resume Summary
+## Author
 
-**Built by:** Muzammil Ibrahim, IBM CIC Bangalore Intern (2025–26).
+**Muzammil Ibrahim**  
+*IBM CIC Bangalore Intern (2025–26)*
 
-Built a Python ETL pipeline automating healthcare claims auto-adjudication reporting across 5 business segments. Reduced daily reporting time from ~45 minutes to under 2 minutes. Designed system architecture based on real claims operations workflows, handled robust data validation edge cases, and implemented end-to-end automated email delivery. Stack: Python, Pandas, OpenPyXL, ConfigParser.
+I built this Python ETL pipeline to automate healthcare claims auto-adjudication reporting across 5 business segments. This project reduces daily reporting time from ~45 minutes to under 2 minutes. I designed the system architecture based on real claims operations workflows, handled robust data validation edge cases, and implemented end-to-end automated email delivery.  
+**Stack:** Python, Pandas, OpenPyXL, ConfigParser.

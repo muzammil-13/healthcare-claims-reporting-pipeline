@@ -3,7 +3,7 @@ import pandas as pd
 def validate_columns(df, required_cols=None):
     """Check if DataFrame has required columns."""
     if required_cols is None:
-        required_cols = ["SegmentCode","ProcessingType"]
+        required_cols = ["SegmentCode", "TOT_CLMS", "TOT_AA"]
     
     
     missing = set(required_cols) - set(df.columns)
@@ -26,7 +26,8 @@ def check_nulls(df, critical_cols=None):
 def check_duplicates(df, subset=None):
     """Remove duplicate rows."""
     if subset is None:
-        subset = ["SegmentCode"] if "SegmentCode" in df.columns else None
+        available = [c for c in ["SegmentCode", "ClaimDate"] if c in df.columns]
+        subset = available if available else None
     
     before = len(df)
     if subset:

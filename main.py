@@ -1,13 +1,15 @@
 import sys
+import os
 import logging
+import shutil
+from datetime import datetime, timedelta
 from config import PATHS, ensure_dirs, EMAIL, LOG_FILE
 from src.ingestion import load_text_delimited, load_csv
 from src.validation import validate
 from src.processing import merge_data, append_to_ytd, save_csv
 from src.metrics import calculate_metrics, print_metrics, save_excel_report
+from src.sharepoint import upload_multiple
 from src.report import generate_and_send_email
-import shutil
-from datetime import datetime, timedelta
 
 def main():
     # Create directories first so the logs/ folder exists for the FileHandler
@@ -31,7 +33,7 @@ def main():
         formatted_date = report_date.strftime('%B %d, %Y')
         
         logger.info("=" * 70)
-        logger.info(f"Healthcare Claims Auto-Adjudication Pipeline - STARTED (Reporting for {formatted_date})")
+        logger.info(f"Healthcare Claims Pipeline — STARTED  (Reporting for {formatted_date})")
         logger.info("=" * 70)
         
         # Step 1: Load data
@@ -52,6 +54,7 @@ def main():
         ytd_df = append_to_ytd(merged_df)
         # After ytd_df.to_csv(ytd_path...) line, add:
         processed_filename = f"mbu_{report_date_str}.csv"
+        os.makedirs("data/processed", exist_ok=True)
         shutil.copy(PATHS["raw_mbu_data"], f"data/processed/{processed_filename}")
         logger.info(f"  MBU file archived to: data/processed/{processed_filename}")
         save_csv(ytd_df, PATHS["ytd_dataset"])
@@ -62,17 +65,30 @@ def main():
         metrics = calculate_metrics(merged_df)
         print_metrics(metrics)
         
-        # Step 5: Save report
-        logger.info("[5] Saving Excel report...")
+        # Step 5: Save Excel reports
+        logger.info("[5] Saving Excel reports...")
         save_excel_report(metrics, PATHS["excel_report"])
         
         ytd_excel_path = f"data/output/YTD_{report_date_str}.xlsx"
         ytd_df.to_excel(ytd_excel_path, sheet_name=f"YTD_{report_date_str}", index=False)
-        logger.info(f"  YTD dataset saved as a separate file to {ytd_excel_path}")
+        logger.info(f"  YTD snapshot saved: {ytd_excel_path}")
         
-        # Step 6: Send email report
-        logger.info("[6] Sending email notification...")
-        generate_and_send_email(metrics, EMAIL, [PATHS["excel_report"], ytd_excel_path], formatted_date)
+        # Step 6: Upload to SharePoint (simulated)
+        logger.info("[6] Uploading reports to SharePoint...")
+        sharepoint_links = upload_multiple(
+            [PATHS["excel_report"], ytd_excel_path],
+            report_date=report_date_str,
+        )
+        logger.info(f"  SharePoint links generated: {len(sharepoint_links)} file(s)")
+
+        # Step 7: Send email with links + inline chart (no attachments)
+        logger.info("[7] Sending email notification...")
+        generate_and_send_email(
+            metrics=metrics,
+            email_config=EMAIL,
+            sharepoint_links=sharepoint_links,
+            report_date=formatted_date,
+        )
 
         logger.info("=" * 70)
         logger.info("Pipeline completed successfully!")
