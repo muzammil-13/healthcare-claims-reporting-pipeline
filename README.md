@@ -105,6 +105,8 @@ These generated outputs are intentionally ignored by Git.
 - pandas
 - openpyxl
 - SMTP/email utilities from the Python standard library
+- Streamlit (for dashboard visualization)
+- Pytest (for unit testing)
 
 ## Getting Started
 
@@ -160,13 +162,13 @@ After a successful run, the pipeline creates:
 ### Generated Report Preview
 
 **1. Automated Email Notification**  
-![Automated Email Report](docs/email_preview.png)
+![Automated Email Report](docs/images/email_preview.png)
 
 **2. Generated Excel Summary**  
-![Excel Summary](docs/excel_preview.png)
+![Excel Summary](docs/images/excel_preview.png)
 
 **3. Terminal Execution**  
-![Terminal Execution](docs/terminal_run.png)
+![Terminal Execution](docs/images/terminal_run.png)
 
 ## Configuration
 
