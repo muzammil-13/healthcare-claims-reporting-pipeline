@@ -159,7 +159,14 @@ After a successful run, the pipeline creates:
 
 ### Generated Report Preview
 
-*(Take a screenshot of the beautiful HTML email you received in your inbox and place it here!)*
+**1. Automated Email Notification**  
+![Automated Email Report](docs/email_preview.png)
+
+**2. Generated Excel Summary**  
+![Excel Summary](docs/excel_preview.png)
+
+**3. Terminal Execution**  
+![Terminal Execution](docs/terminal_run.png)
 
 ## Configuration
 
