@@ -4,7 +4,9 @@ from src.ingestion import load_text_delimited, load_csv
 from src.validation import validate
 from src.processing import merge_data, append_to_ytd, save_csv
 from src.metrics import calculate_metrics, print_metrics, save_excel_report
-from src.report import generate_html_report, generate_and_send_email
+from src.report import generate_and_send_email
+import shutil
+from datetime import datetime
 
 def main():
     try:
@@ -30,6 +32,10 @@ def main():
         print("\n[3] Processing data...")
         merged_df = merge_data(mbu_df, reference_df)
         ytd_df = append_to_ytd(merged_df)
+        # After ytd_df.to_csv(ytd_path...) line, add:
+        processed_filename = f"mbu_{datetime.today().strftime('%Y%m%d')}.csv"
+        shutil.copy(PATHS["raw_mbu_data"], f"data/processed/{processed_filename}")
+        print(f"  MBU file archived to: data/processed/{processed_filename}")
         save_csv(ytd_df, PATHS["ytd_dataset"])
         print(f"  Merged {len(merged_df)} records")
         

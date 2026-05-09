@@ -1,4 +1,4 @@
-from config import SEGMENT_CODES, SEGMENTS
+from config import SEGMENT_CODES
 
 def calculate_metrics(df):
     """Calculate metrics per segment: total, auto, manual, AA rate."""
@@ -16,7 +16,7 @@ def calculate_metrics(df):
         aa_rate = round(auto / total * 100, 2) if total > 0 else 0
         
         metrics[segment_code] = {
-            "segment_name": SEGMENTS.get(segment_code, segment_code),
+            "segment_name": SEGMENT_CODES.get(segment_code, segment_code),
             "total_claims": total,
             "auto_claims": auto,
             "manual_claims": manual,

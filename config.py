@@ -1,36 +1,40 @@
 import os
+import configparser
 
-EXECUTION_MODE = "MTD"
+# Initialize ConfigParser and read the INI file
+config = configparser.ConfigParser()
 
-PATHS = {
-    "raw_mbu_data": "data/input/mbu_report.txt",
-    "reference_csv": "data/input/reference_data.csv",
-    "ytd_dataset": "data/processed/ytd_data.csv",
-    "excel_report": "data/output/West_Market_Summary.xlsx",
+# Safely locate and read config.ini in the current directory
+ini_path = os.path.join(os.path.dirname(__file__), 'config.ini')
+config.read(ini_path)
+
+# Extract configurations into structures expected by main.py
+PATHS = dict(config["Paths"])
+
+# Format EMAIL config to match what src/report.py expects
+EMAIL = dict(config["SMTP"])
+if "recipients" in EMAIL:
+    # If recipients are defined in config.ini, split them into a list
+    EMAIL["recipients"] = [r.strip() for r in EMAIL["recipients"].split(",")]
+else:
+    # Default to sending the email to the authenticated user
+    EMAIL["recipients"] = [EMAIL.get("username", "")]
+
+# Define business segment mapping codes expected by src/metrics.py
+SEGMENT_CODES = {
+    "MCR": "Medicare",
+    "MCD": "Medicaid",
+    "COM": "Commercial"
 }
-
-SEGMENTS = {
-    "WGS": "WGS",
-    "MED": "Medicaid",
-    "GBD": "GBD",
-    "COM": "Commercial",
-    "NEW": "New States",
-}
-
-SEGMENT_CODES = ["WGS", "MED", "GBD", "COM", "NEW"]
-
-REQUIRED_COLUMNS = ["SegmentCode", "ProcessingType"]
-
-EMAIL = {
-    "sender": "demo@example.com",
-    "recipients": ["stakeholder@example.com"],
-    "subject": "Daily Healthcare Claims Auto-Adjudication Report",
-}
-
-LOG_FILE = "logs/pipeline.log"
 
 def ensure_dirs():
-    """Create required directories if they don't exist."""
-    for path in [PATHS["ytd_dataset"], PATHS["excel_report"]]:
-        os.makedirs(os.path.dirname(path), exist_ok=True)
-    os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
+    """Ensure that the directories for all configured paths exist."""
+    for file_path in PATHS.values():
+        directory = os.path.dirname(file_path)
+        if directory:
+            os.makedirs(directory, exist_ok=True)
+            
+    if config.has_section("Logging") and "log_file" in config["Logging"]:
+        log_dir = os.path.dirname(config["Logging"]["log_file"])
+        if log_dir:
+            os.makedirs(log_dir, exist_ok=True)
