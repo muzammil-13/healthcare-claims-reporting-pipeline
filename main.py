@@ -48,9 +48,13 @@ def main():
         print("\n[5] Saving Excel report...")
         save_excel_report(metrics, PATHS["excel_report"])
         
+        ytd_excel_path = f"data/output/YTD_{datetime.today().strftime('%Y%m%d')}.xlsx"
+        ytd_df.to_excel(ytd_excel_path, index=False)
+        print(f"  YTD dataset saved as a separate file to {ytd_excel_path}")
+        
         # Step 6: Send email report
         print("\n[6] Sending email notification...")
-        generate_and_send_email(metrics, EMAIL, PATHS["excel_report"])
+        generate_and_send_email(metrics, EMAIL, [PATHS["excel_report"], ytd_excel_path])
 
         print("=" * 70)
         print("Pipeline completed successfully!")

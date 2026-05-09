@@ -9,7 +9,7 @@ def generate_html_report(metrics_dict):
     <html>
     <head>
         <style>
-            table { border-collapse: collapse; width: 60%; font-family: Arial, sans-serif; }
+            table { border-collapse: collapse; width: 100%; font-family: Arial, sans-serif; }
             th, td { border: 1px solid #dddddd; padding: 10px; text-align: left; }
             th { background-color: #f2f2f2; color: #333333; }
             body { font-family: Arial, sans-serif; color: #333333; }
@@ -19,11 +19,25 @@ def generate_html_report(metrics_dict):
         <h2>Daily Auto-Adjudication Report</h2>
         <p>Please find the daily summary of healthcare claims below:</p>
         <table>
-            <tr><th>Metric</th><th>Value</th></tr>
+            <tr>
+                <th>Segment Name</th>
+                <th>Segment Code</th>
+                <th>Total Claims</th>
+                <th>Auto Claims</th>
+                <th>Manual Claims</th>
+                <th>AA Rate (%)</th>
+            </tr>
     """
     
-    for key, value in metrics_dict.items():
-        html += f"            <tr><td>{key}</td><td>{value}</td></tr>\n"
+    for segment_code, data in metrics_dict.items():
+        html += f"            <tr>\n"
+        html += f"                <td>{data['segment_name']}</td>\n"
+        html += f"                <td>{segment_code}</td>\n"
+        html += f"                <td>{data['total_claims']}</td>\n"
+        html += f"                <td>{data['auto_claims']}</td>\n"
+        html += f"                <td>{data['manual_claims']}</td>\n"
+        html += f"                <td>{data['aa_rate']}</td>\n"
+        html += f"            </tr>\n"
         
     html += """
         </table>
@@ -33,8 +47,8 @@ def generate_html_report(metrics_dict):
     """
     return html
 
-def generate_and_send_email(metrics, email_config, attachment_path=None):
-    """Sends an email with the HTML report and an optional attachment using SMTP_SSL."""
+def generate_and_send_email(metrics, email_config, attachment_paths=None):
+    """Sends an email with the HTML report and optional attachments using SMTP_SSL."""
     html_content = generate_html_report(metrics)
     
     # Load credentials from config.ini
@@ -55,13 +69,16 @@ def generate_and_send_email(metrics, email_config, attachment_path=None):
     msg.set_content("Please enable HTML to view this report.")
     msg.add_alternative(html_content, subtype='html')
     
-    if attachment_path and Path(attachment_path).exists():
-        with open(attachment_path, 'rb') as f:
-            file_data = f.read()
-            file_name = Path(attachment_path).name
-        msg.add_attachment(file_data, maintype='application', 
-                           subtype='vnd.openxmlformats-officedocument.spreadsheetml.sheet', 
-                           filename=file_name)
+    if attachment_paths:
+        paths = [attachment_paths] if isinstance(attachment_paths, (str, Path)) else attachment_paths
+        for file_path in paths:
+            if Path(file_path).exists():
+                with open(file_path, 'rb') as f:
+                    file_data = f.read()
+                    file_name = Path(file_path).name
+                msg.add_attachment(file_data, maintype='application', 
+                                   subtype='vnd.openxmlformats-officedocument.spreadsheetml.sheet', 
+                                   filename=file_name)
 
     try:
         with smtplib.SMTP_SSL(smtp_server, smtp_port) as server:

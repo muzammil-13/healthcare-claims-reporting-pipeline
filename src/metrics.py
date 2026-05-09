@@ -63,4 +63,4 @@ def save_excel_report(metrics, excel_path):
     with pd.ExcelWriter(excel_path, engine="openpyxl") as writer:
         df.to_excel(writer, sheet_name="West Market Summary", index=False)
     
-    print(f"Excel report saved to {excel_path}")
+    print(f"  Excel report saved to {excel_path}")
