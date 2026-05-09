@@ -13,17 +13,17 @@
 | Data parsing & merging | ✅ Done |
 | Metrics computation | ✅ Done |
 | Excel report generation | ✅ Done |
-| Sample data (runnable) | ❌ Missing |
-| Email output | ❌ Placeholder (`pass`) |
-| End-to-end test | ❌ Not verified |
-| Measurable impact stat | ❌ Vague |
+| Sample data (runnable) | ✅ Done |
+| Email output | ✅ Done (HTML & SMTP) |
+| End-to-end test | ✅ Verified |
+| Measurable impact stat | 🔄 In Progress (Phase 2) |
 
-**Current read:** Clean architecture. Doesn't run out of the box.  
-**Target read:** Built and runs. Solves a real ops problem. Numbers to prove it.
+**Current read:** Built and runs! Email and Excel outputs are fully operational.  
+**Target read:** Solves a real ops problem. Numbers to prove it. (Credibility focus)
 
 ---
 
-## Phase 1 — Make It Run (Week 1–2, by ~23 May)
+## ~~Phase 1 — Make It Run (Week 1–2, by ~23 May)~~ ✅ COMPLETED
 
 **Goal:** Anyone who clones this repo can run it in under 5 minutes.
 
@@ -54,7 +54,7 @@ MED|AUTO|2026-04-01|900.00
 
 ---
 
-## Phase 2 — Make It Credible (Week 3–4, by ~06 Jun)
+## Phase 2 — Make It Credible (Week 3–4, by ~06 Jun) 🚀 CURRENT FOCUS
 
 **Goal:** The README tells a real story with real numbers.
 
