@@ -34,7 +34,7 @@ SEGMENT_COLORS = {
 DEFAULT_COLOR = "#8c8c8c"
 
 # AA rate threshold line — leadership benchmark
-AA_TARGET_RATE = 85.0
+AA_TARGET_RATE = 94.0
 
 
 def build_chart_dataframe(metrics: dict) -> pd.DataFrame:

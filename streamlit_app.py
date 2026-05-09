@@ -72,7 +72,7 @@ for col, (_, row) in zip(cols, df.iterrows()):
     col.metric(
         label=row["Segment Name"],
         value=f"{rate:.1f}%",
-        delta=f"{rate - 85:.1f}% vs target",
+        delta=f"{rate - 94:.1f}% vs target",
         delta_color=delta_color,
     )
 
