@@ -1,4 +1,7 @@
+import logging
 from config import SEGMENT_CODES
+
+logger = logging.getLogger(__name__)
 
 def calculate_metrics(df):
     """Calculate metrics per segment: total, auto, manual, AA rate."""
@@ -27,18 +30,18 @@ def calculate_metrics(df):
 
 def print_metrics(metrics):
     """Pretty print metrics."""
-    print("\n" + "=" * 70)
-    print("METRICS SUMMARY")
-    print("=" * 70)
+    logger.info("=" * 70)
+    logger.info("METRICS SUMMARY")
+    logger.info("=" * 70)
     
     for segment_code, data in metrics.items():
-        print(f"\n{data['segment_name']} ({segment_code}):")
-        print(f"  Total Claims: {data['total_claims']}")
-        print(f"  Auto Claims:  {data['auto_claims']}")
-        print(f"  Manual Claims: {data['manual_claims']}")
-        print(f"  AA Rate (%): {data['aa_rate']}")
+        logger.info(f"{data['segment_name']} ({segment_code}):")
+        logger.info(f"  Total Claims: {data['total_claims']}")
+        logger.info(f"  Auto Claims:  {data['auto_claims']}")
+        logger.info(f"  Manual Claims: {data['manual_claims']}")
+        logger.info(f"  AA Rate (%): {data['aa_rate']}")
     
-    print("\n" + "=" * 70 + "\n")
+    logger.info("=" * 70)
 
 def save_excel_report(metrics, excel_path):
     """Save metrics to Excel workbook."""
@@ -63,4 +66,4 @@ def save_excel_report(metrics, excel_path):
     with pd.ExcelWriter(excel_path, engine="openpyxl") as writer:
         df.to_excel(writer, sheet_name="West Market Summary", index=False)
     
-    print(f"  Excel report saved to {excel_path}")
+    logger.info(f"  Excel report saved to {excel_path}")
