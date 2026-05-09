@@ -1,45 +1,107 @@
+"""
+config.py — Configuration loader for the Healthcare Claims Reporting Pipeline.
+
+Credential loading order (most secure first):
+    1. Environment variables  ← always preferred in production
+    2. config.ini fallback    ← for local dev only, never commit with real values
+
+Environment variables recognised:
+    SMTP_SERVER    — SMTP host (e.g. smtp.gmail.com)
+    SMTP_PORT      — SMTP port (e.g. 465)
+    SMTP_USERNAME  — sender email address
+    SMTP_PASSWORD  — sender password or app password  ← most sensitive
+    SMTP_RECIPIENTS — comma-separated recipient list
+    SMTP_SUBJECT   — email subject prefix
+
+To set env vars locally (Windows PowerShell):
+    $env:SMTP_PASSWORD = "your-app-password"
+
+To set env vars locally (bash/zsh):
+    export SMTP_PASSWORD="your-app-password"
+
+For CI/CD (GitHub Actions), add these as repository secrets:
+    Settings → Secrets and variables → Actions → New repository secret
+"""
+
 import os
 import configparser
 
-# Initialize ConfigParser and read the INI file
+# ── Load config.ini (used only as fallback for non-sensitive settings) ────────
 config = configparser.ConfigParser()
-
-# Safely locate and read config.ini in the current directory
-ini_path = os.path.join(os.path.dirname(__file__), 'config.ini')
+ini_path = os.path.join(os.path.dirname(__file__), "config.ini")
 config.read(ini_path)
 
-# Extract configurations into structures expected by main.py
-PATHS = dict(config["Paths"])
+# ── Paths ─────────────────────────────────────────────────────────────────────
+DEFAULT_PATHS = {
+    "raw_mbu_data": "data/input/sample_mbu.csv",
+    "reference_csv": "data/input/sample_reference.csv",
+    "ytd_dataset": "data/processed/ytd_data.csv",
+    "excel_report": "data/output/West_Market_Summary.xlsx",
+    "processed_path": "data/processed/",
+}
 
-# Extract logging configuration
+PATHS = DEFAULT_PATHS.copy()
+if config.has_section("Paths"):
+    PATHS.update(dict(config["Paths"]))
+
+# ── Logging ───────────────────────────────────────────────────────────────────
 LOG_FILE = config.get("Logging", "log_file", fallback="logs/pipeline.log")
 
-# Format EMAIL config to match what src/report.py expects
-EMAIL = dict(config["SMTP"])
-if "recipients" in EMAIL:
-    # If recipients are defined in config.ini, split them into a list
-    EMAIL["recipients"] = [r.strip() for r in EMAIL["recipients"].split(",")]
-else:
-    # Default to sending the email to the authenticated user
-    EMAIL["recipients"] = [EMAIL.get("username", "")]
+# ── SMTP / Email ──────────────────────────────────────────────────────────────
+# Environment variables take priority over config.ini for all credential fields.
+# This ensures passwords are never stored in version-controlled files.
 
-# Define business segment mapping codes expected by src/metrics.py
+_smtp_server    = os.getenv("SMTP_SERVER")    or config.get("SMTP", "server",    fallback="smtp.gmail.com")
+_smtp_port      = os.getenv("SMTP_PORT")      or config.get("SMTP", "port",      fallback="465")
+_smtp_username  = os.getenv("SMTP_USERNAME")  or config.get("SMTP", "username",  fallback="")
+_smtp_password  = os.getenv("SMTP_PASSWORD")  or config.get("SMTP", "password",  fallback="")
+_smtp_recipients= os.getenv("SMTP_RECIPIENTS")or config.get("SMTP", "recipients",fallback="")
+_smtp_subject   = os.getenv("SMTP_SUBJECT")   or config.get("SMTP", "subject",   fallback="Daily Healthcare Claims Report")
+
+# Warn loudly if password is coming from config.ini instead of env var
+if not os.getenv("SMTP_PASSWORD") and _smtp_password:
+    import warnings
+    warnings.warn(
+        "SMTP_PASSWORD is being read from config.ini. "
+        "Set the SMTP_PASSWORD environment variable instead for production use.",
+        stacklevel=2,
+    )
+
+EMAIL = {
+    "server":     _smtp_server,
+    "port":       int(_smtp_port),
+    "username":   _smtp_username,
+    "password":   _smtp_password,
+    "recipients": [r.strip() for r in _smtp_recipients.split(",") if r.strip()],
+    "subject":    _smtp_subject,
+    "sender":     _smtp_username,
+}
+
+# ── Segment code mappings ─────────────────────────────────────────────────────
+# Keys must match SegmentCode values in sample_mbu.csv exactly.
 SEGMENT_CODES = {
-    "WGS": "WGS Market",
+    "WGS": "Whole Group Solutions",
     "MED": "Medicaid",
-    "GBD": "GBD Market",
+    "GBD": "Government Business Division",
     "COM": "Commercial",
     "NEW": "New States"
 }
 
+# ── Directory setup ───────────────────────────────────────────────────────────
 def ensure_dirs():
-    """Ensure that the directories for all configured paths exist."""
+    """Create all required directories if they don't exist."""
+    required_dirs = [
+        "data/input",
+        "data/output",
+        "data/processed",
+        "logs",
+        "sharepoint_sim",
+    ]
+    for d in required_dirs:
+        os.makedirs(d, exist_ok=True)
+
+    # Also create dirs for any configured file paths
     for file_path in PATHS.values():
         directory = os.path.dirname(file_path)
         if directory:
             os.makedirs(directory, exist_ok=True)
-            
-    if config.has_section("Logging") and "log_file" in config["Logging"]:
-        log_dir = os.path.dirname(config["Logging"]["log_file"])
-        if log_dir:
-            os.makedirs(log_dir, exist_ok=True)
