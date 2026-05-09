@@ -6,20 +6,18 @@ __pycache__/
 .venv/
 venv/
 
-# Configuration & Secrets
+# Configuration & Secrets — NEVER commit these
 .env
 config.ini
 
 # Data & Artifacts (Protecting PHI/PII)
-data/input/*
+# Input sample files ARE committed (synthetic data only)
 data/output/*
 data/processed/*
-sharepoint_sim/
-*.csv
+data/input/ytd_dataset.csv
 
-# Allow sample data files to be tracked
-!data/input/sample_mbu.csv
-!data/input/sample_reference.csv
+# SharePoint simulation folder — local only
+sharepoint_sim/
 
 # Logs & Reports
 logs/
