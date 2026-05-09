@@ -6,14 +6,19 @@ from src.processing import merge_data, append_to_ytd, save_csv
 from src.metrics import calculate_metrics, print_metrics, save_excel_report
 from src.report import generate_and_send_email
 import shutil
-from datetime import datetime
+from datetime import datetime, timedelta
 
 def main():
     try:
         ensure_dirs()
         
+        # The pipeline reports on yesterday's claims (T-1)
+        report_date = datetime.today() - timedelta(days=1)
+        report_date_str = report_date.strftime('%Y%m%d')
+        formatted_date = report_date.strftime('%B %d, %Y')
+        
         print("=" * 70)
-        print("Healthcare Claims Auto-Adjudication Pipeline - STARTED")
+        print(f"Healthcare Claims Auto-Adjudication Pipeline - STARTED (Reporting for {formatted_date})")
         print("=" * 70)
         
         # Step 1: Load data
@@ -33,7 +38,7 @@ def main():
         merged_df = merge_data(mbu_df, reference_df)
         ytd_df = append_to_ytd(merged_df)
         # After ytd_df.to_csv(ytd_path...) line, add:
-        processed_filename = f"mbu_{datetime.today().strftime('%Y%m%d')}.csv"
+        processed_filename = f"mbu_{report_date_str}.csv"
         shutil.copy(PATHS["raw_mbu_data"], f"data/processed/{processed_filename}")
         print(f"  MBU file archived to: data/processed/{processed_filename}")
         save_csv(ytd_df, PATHS["ytd_dataset"])
@@ -48,13 +53,13 @@ def main():
         print("\n[5] Saving Excel report...")
         save_excel_report(metrics, PATHS["excel_report"])
         
-        ytd_excel_path = f"data/output/YTD_{datetime.today().strftime('%Y%m%d')}.xlsx"
-        ytd_df.to_excel(ytd_excel_path, index=False)
+        ytd_excel_path = f"data/output/YTD_{report_date_str}.xlsx"
+        ytd_df.to_excel(ytd_excel_path, sheet_name=f"YTD_{report_date_str}", index=False)
         print(f"  YTD dataset saved as a separate file to {ytd_excel_path}")
         
         # Step 6: Send email report
         print("\n[6] Sending email notification...")
-        generate_and_send_email(metrics, EMAIL, [PATHS["excel_report"], ytd_excel_path])
+        generate_and_send_email(metrics, EMAIL, [PATHS["excel_report"], ytd_excel_path], formatted_date)
 
         print("=" * 70)
         print("Pipeline completed successfully!")

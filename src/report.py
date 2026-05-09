@@ -3,7 +3,7 @@ import configparser
 from email.message import EmailMessage
 from pathlib import Path
 
-def generate_html_report(metrics_dict):
+def generate_html_report(metrics_dict, report_date):
     """Generates an HTML report from the metrics dictionary with a styled table."""
     html = """
     <html>
@@ -16,8 +16,8 @@ def generate_html_report(metrics_dict):
         </style>
     </head>
     <body>
-        <h2>Daily Auto-Adjudication Report</h2>
-        <p>Please find the daily summary of healthcare claims below:</p>
+        <h2>Daily Auto-Adjudication Report (""" + report_date + """)</h2>
+        <p>Please find the daily summary of healthcare claims for """ + report_date + """ below:</p>
         <table>
             <tr>
                 <th>Segment Name</th>
@@ -47,9 +47,9 @@ def generate_html_report(metrics_dict):
     """
     return html
 
-def generate_and_send_email(metrics, email_config, attachment_paths=None):
+def generate_and_send_email(metrics, email_config, attachment_paths=None, report_date=""):
     """Sends an email with the HTML report and optional attachments using SMTP_SSL."""
-    html_content = generate_html_report(metrics)
+    html_content = generate_html_report(metrics, report_date)
     
     # Load credentials from config.ini
     config = configparser.ConfigParser()
@@ -62,7 +62,8 @@ def generate_and_send_email(metrics, email_config, attachment_paths=None):
     smtp_password = config.get('SMTP', 'password', fallback='')
     
     msg = EmailMessage()
-    msg['Subject'] = email_config.get('subject', 'Daily Healthcare Claims Report')
+    base_subject = email_config.get('subject', 'Daily Healthcare Claims Report')
+    msg['Subject'] = f"{base_subject} - {report_date}"
     msg['From'] = smtp_user
     msg['To'] = ", ".join(email_config.get('recipients', []))
     
