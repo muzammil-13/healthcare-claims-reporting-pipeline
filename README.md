@@ -164,8 +164,8 @@ After a successful run, the pipeline creates:
 **1. Automated Email Notification**  
 ![Automated Email Report](docs/images/email_preview.png)
 
-**2. Generated Excel Summary**  
-![Excel Summary](docs/images/excel_preview.png)
+**2.Report Files (SharePoint)**  
+![Excel Summary](docs/images/west_market_summary_link.png)
 
 **3. Terminal Execution**  
 ![Terminal Execution](docs/images/terminal_run.png)

@@ -27,7 +27,7 @@ from pathlib import Path
 logger = logging.getLogger(__name__)
 
 # Simulated SharePoint base URL — replace with your real tenant in production
-SHAREPOINT_BASE_URL = "https://elevenhealth.sharepoint.com/sites/ClaimsOps/Shared%20Documents"
+SHAREPOINT_BASE_URL = "https://elevancehealth.sharepoint.com/sites/ClaimsOps/Shared%20Documents"
 LOCAL_SIM_DIR = "sharepoint_sim"  # local folder that mimics the document library
 
 
