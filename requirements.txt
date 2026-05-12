@@ -3,3 +3,4 @@ openpyxl>=3.1.5
 matplotlib>=3.7.0
 streamlit>=1.35.0
 pytest>=7.0.0
+python-dotenv>=1.0.0
