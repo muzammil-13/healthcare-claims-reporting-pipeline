@@ -50,6 +50,8 @@ Claims Extract
 - Calculates segment-level auto-adjudication metrics
 - Exports report data to an Excel workbook
 - Generates HTML summary content for email reporting
+- Simulates enterprise SharePoint file uploads for deliverable sharing
+- Features a real-time Streamlit dashboard for KPI visualization
 - Uses a simple configuration layer for paths, segments, and email metadata
 
 ## Metrics Generated
@@ -73,31 +75,33 @@ Configured segments:
 
 ```text
 healthcare-claims-reporting-pipeline/
+├── src/                          # Core pipeline modules
+│   ├── ingestion.py             # Data loading
+│   ├── validation.py            # Data quality checks
+│   ├── processing.py            # Transformations
+│   ├── metrics.py               # KPI calculations
+│   ├── report.py                # Excel generation
+│   ├── sharepoint.py            # SharePoint simulation
+│   └── charts.py                # Visualizations
+│
 ├── data/
-│   └── input/
-│       ├── mbu_report.txt
-│       └── reference_data.csv
-├── src/
-│   ├── ingestion.py
-│   ├── validation.py
-│   ├── processing.py
-│   ├── metrics.py
-│   └── report.py
-├── config.py
-├── main.py
-├── requirements.txt
-└── README.md
+│   ├── input/                   # Input CSV files
+│   ├── processed/               # Intermediate outputs (git-ignored)
+│   └── output/                  # Final Excel reports (git-ignored)
+│
+├── tests/                        # Unit & integration tests
+├── docs/                         # Documentation assets
+├── logs/                         # Application logs (git-ignored)
+│
+├── main.py                       # Pipeline entry point
+├── config.py                     # Configuration layer
+├── streamlit_app.py             # Dashboard UI
+├── requirements.txt             # Dependencies
+├── README.md                    # Main documentation
+├── DECISIONS.md                 # Architecture decisions
+├── SECURITY.md                  # Security guide
+└── TESTING.md                   # Test documentation
 ```
-
-Generated files are written under:
-
-```text
-data/processed/
-data/output/
-logs/
-```
-
-These generated outputs are intentionally ignored by Git.
 
 ## Tech Stack
 
@@ -143,6 +147,8 @@ The sample claims extract uses a pipe-delimited format:
 SegmentCode|ClaimDate|TOT_CLMS|TOT_AA|Status
 COM|2026-05-08|1250|980|PAID
 ```
+
+**Important:** For email delivery, set up your SMTP credentials as environment variables to avoid fallback warnings. See [SECURITY.md](SECURITY.md#credential-management) for detailed instructions.
 
 ### 5. Run the pipeline
 
@@ -192,10 +198,6 @@ configuration file or environment variables for real credentials.
 
 ## Future Enhancements
 
-- Add unit tests for each pipeline stage
-- Add richer validation for dates, status values, and processing types
-- Add state-level and month-to-date reporting views
-- Add Streamlit or Power BI-ready dashboard output
 - Add scheduling through cron, Windows Task Scheduler, or Airflow
 - Move secrets fully to environment-based configuration
 - Add Docker support for reproducible execution
