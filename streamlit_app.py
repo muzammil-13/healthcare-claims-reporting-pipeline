@@ -18,6 +18,7 @@ from datetime import datetime
 from src.ingestion import load_csv, load_text_delimited
 from src.metrics import calculate_metrics
 from src.processing import merge_data
+from src.validation import validate
 
 # ── Page config ──────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -85,6 +86,10 @@ def load_sample_dashboard_data(
     """Build dashboard data from committed sample files for fresh cloud deploys."""
     mbu_df = load_text_delimited(mbu_path)
     reference_df = load_csv(reference_path)
+    
+    mbu_df = validate(mbu_df)
+    reference_df = validate(reference_df, required_cols=["SegmentCode"])
+    
     merged_df = merge_data(mbu_df, reference_df)
     metrics = calculate_metrics(merged_df)
     return metrics_to_dataframe(metrics), merged_df, "sample input files"
@@ -119,8 +124,8 @@ for col, (_, row) in zip(cols, df.iterrows()):
     delta_color = "normal" if rate >= 85 else "inverse"
     col.metric(
         label=row["Segment Name"],
-        value=f"{rate:.1f}%",
-        delta=f"{rate - 94:.1f}% vs target",
+        value=f"{rate:.2f}%",
+        delta=f"{rate - 94:.2f}% vs target",
         delta_color=delta_color,
     )
 

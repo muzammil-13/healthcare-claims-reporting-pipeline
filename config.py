@@ -25,8 +25,12 @@ For CI/CD (GitHub Actions), add these as repository secrets:
 
 import os
 import configparser
+from dotenv import load_dotenv
 
-# ── Load config.ini (used only as fallback for non-sensitive settings) ────────
+# ── Load .env file (if it exists) to inject local secrets securely ────────────
+load_dotenv()
+
+# ── Load config.ini (used for non-sensitive path/app settings) ────────────────
 config = configparser.ConfigParser()
 ini_path = os.path.join(os.path.dirname(__file__), "config.ini")
 config.read(ini_path)

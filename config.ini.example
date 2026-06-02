@@ -1,0 +1,22 @@
+; config.ini.example
+; Copy this file to config.ini. config.ini is gitignored.
+; For sensitive credentials (like SMTP_PASSWORD), use .env or environment variables instead.
+
+[Paths]
+raw_mbu_data = data/input/sample_mbu.csv
+reference_csv = data/input/sample_reference.csv
+ytd_dataset = data/processed/ytd_data.csv
+excel_report = data/output/West_Market_Summary.xlsx
+processed_path = data/processed/
+
+[Logging]
+log_file = logs/pipeline.log
+
+[SMTP]
+server = smtp.gmail.com
+port = 465
+username = your-sender@gmail.com
+; Leave password blank here and use the SMTP_PASSWORD environment variable instead!
+password = 
+recipients = recipient1@example.com, recipient2@example.com
+subject = Daily Healthcare Claims Report

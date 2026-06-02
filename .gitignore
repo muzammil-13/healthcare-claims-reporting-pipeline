@@ -2,6 +2,9 @@
 __pycache__/
 *.py[cod]
 
+# Testing
+.pytest_cache/
+
 # Virtual Environments
 .venv/
 venv/
@@ -29,3 +32,7 @@ logs/
 .DS_Store
 .vscode/
 .idea/
+
+#personal doc
+docs/healthcare-claims-reporting-pipeline-Enhance_ROADMAP-9may26[claude].md
+docs/Recommended Next Improvements (2jun26).md
