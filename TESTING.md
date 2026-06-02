@@ -46,3 +46,7 @@ Our unit tests are organized to test individual components of the ETL pipeline:
 - **`test_validation.py`**:
   - Ensures `validate_columns()` catches missing schema dependencies.
   - Verifies that `check_duplicates()` successfully identifies and removes duplicate rows based on identical `SegmentCode` and `ClaimDate`.
+
+- **`test_sharepoint.py`**:
+  - Tests the simulated SharePoint upload mechanism using `pytest` fixtures (`monkeypatch` and `tmp_path`) to redirect I/O operations and avoid leaving residual files.
+  - Verifies that requests to upload missing files are handled gracefully and logged appropriately without crashing the pipeline.
