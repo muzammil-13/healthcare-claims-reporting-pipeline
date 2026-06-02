@@ -114,6 +114,32 @@ healthcare-claims-reporting-pipeline/
 
 ## Getting Started
 
+### Quick Start
+
+Follow these minimal steps to get the project running locally (Windows and Unix variants). These commands assume Python 3.9+ is installed.
+
+Windows (PowerShell):
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+python main.py            # run the ETL pipeline
+streamlit run streamlit_app.py   # run the dashboard
+```
+
+macOS / Linux (bash):
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python main.py
+streamlit run streamlit_app.py
+```
+
+Use the commands above for a quick trial; see the detailed steps below for additional setup notes.
+
 ### 1. Clone the repository
 
 ```bash
@@ -150,11 +176,56 @@ COM|2026-05-08|1250|980|PAID
 
 **Important:** For email delivery, set up your SMTP credentials as environment variables to avoid fallback warnings. See [SECURITY.md](SECURITY.md#credential-management) for detailed instructions.
 
-### 5. Run the pipeline
+### 5. Run the ETL Pipeline (`main.py`)
+
+`main.py` is the pipeline driver that executes the full ETL and reporting flow for a single reporting run. High-level steps performed by `main.py`:
+
+- Load raw MBU extracts and reference CSVs
+- Validate required columns and basic data quality
+- Merge claims with reference/segment metadata
+- Append new records to the year-to-date dataset
+- Calculate segment-level AA metrics and print a summary
+- Save the stakeholder Excel report (`data/output/West_Market_Summary.xlsx`)
+- Save a YTD Excel snapshot (`data/output/YTD_<YYYYMMDD>.xlsx`)
+- Archive the original MBU file to `data/processed/mbu_<YYYYMMDD>.csv`
+- Simulate uploading reports to SharePoint and generate links
+- Generate and send an email summary (requires SMTP credentials)
+
+Run the pipeline locally with:
 
 ```bash
 python main.py
 ```
+
+Notes:
+- The script defaults to reporting for yesterday (T-1). Adjust the code if a different reporting date is required.
+- Output files created on a successful run:
+    - `data/output/West_Market_Summary.xlsx` (primary dashboard/report)
+    - `data/output/YTD_<YYYYMMDD>.xlsx` (YTD snapshot)
+    - `data/processed/mbu_<YYYYMMDD>.csv` (archived raw extract)
+    - `data/processed/ytd_data.csv` (updated year-to-date CSV)
+- Email sending uses environment variables for SMTP credentials; if `SMTP_PASSWORD` is present only in `config.ini` a warning is emitted. See `config.py` for details.
+
+### 6. Run the Streamlit Dashboard (`streamlit_app.py`)
+
+The Streamlit app provides a live dashboard for the latest generated report. `streamlit_app.py`:
+
+- Looks for the most recent Excel report matching `data/output/West_Market_Summary*.xlsx` and loads the sheet `West Market Summary`.
+- Loads the most recent YTD snapshot matching `data/output/YTD_*.xlsx` (if present) and shows a preview.
+- If no generated report is found or loading fails, the app falls back to committed sample input files (`data/input/sample_mbu.csv` and `data/input/sample_reference.csv`) and builds metrics from those.
+- Renders KPI metrics, an AA rate chart, and a formatted metrics table.
+
+Run the dashboard locally with:
+
+```bash
+streamlit run streamlit_app.py
+```
+
+Tips and caveats:
+- The dashboard expects the Excel sheet to have the columns produced by `save_excel_report()` (see `src/metrics.py`): `Segment Code`, `Segment Name`, `Total Claims`, `Auto Claims`, `Manual Claims`, `AA Rate (%)`.
+- If the most recent Excel file is missing, corrupted, or has a different sheet name the app will use sample data; ensure `main.py` runs successfully to generate the expected report for production use.
+- If `df` is empty, the Streamlit layout (for example `st.columns(len(df))`) may error — verify the report contains rows before launching the dashboard in production.
+
 
 ## Sample Output
 
@@ -170,10 +241,13 @@ After a successful run, the pipeline creates:
 **1. Automated Email Notification**  
 ![Automated Email Report](docs/images/email_preview.png)
 
-**2.Report Files (SharePoint)**  
+**2. Streamlit Dashboard Visualization**  
+![Dashboard Preview](docs/images/dashboard_preview.png)
+
+**3. Report Files (SharePoint)**  
 ![Excel Summary](docs/images/west_market_summary_link.png)
 
-**3. Terminal Execution**  
+**4. Terminal Execution**  
 ![Terminal Execution](docs/images/terminal_run.png)
 
 ## Configuration
@@ -192,7 +266,6 @@ configuration file or environment variables for real credentials.
 
 - Mainframe extraction is simulated with local input files
 - Scheduling is not implemented
-- Dashboard visualization is not included yet
 - Email sending depends on local SMTP configuration
 - Metrics are currently segment-level only
 
